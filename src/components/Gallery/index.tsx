@@ -1,26 +1,32 @@
+import { useState } from 'react'
+
 import { Action, Item, Itens, Modal, ModalContent } from './styles'
 
 import Section from '../Section'
 
-import magica from '../../assets/images/magica.png'
+import hogwarts from '../../assets/images/fundoHogwarts.png'
 import play from '../../assets/images/botao-play 1.png'
 import zoom from '../../assets/images/mais-zoom 1.png'
 import spiderman from '../../assets/images/Spiderman.png'
 import close from '../../assets/images/close 1.png'
 
-type GalleryItem = {
+interface GalleryItem {
   type: 'img' | 'video'
   url: string
+}
+
+interface ModalState extends GalleryItem {
+  isVisible: boolean
 }
 
 const mock: GalleryItem[] = [
   {
     type: 'img',
-    url: magica
+    url: spiderman
   },
   {
     type: 'img',
-    url: magica
+    url: hogwarts
   },
   {
     type: 'video',
@@ -34,6 +40,12 @@ type Props = {
 }
 
 const Gallery = ({ defaultCover, name }: Props) => {
+  const [modal, setModal] = useState<ModalState>({
+    isVisible: false,
+    type: 'img',
+    url: ''
+  })
+
   const getMediaCover = (item: GalleryItem) => {
     if (item.type === 'img') return item.url
     return defaultCover
@@ -43,12 +55,28 @@ const Gallery = ({ defaultCover, name }: Props) => {
     if (item.type === 'img') return zoom
     return play
   }
+
+  const closeModal = () =>
+    setModal({
+      isVisible: false,
+      type: 'img',
+      url: ''
+    })
   return (
     <>
       <Section title="Galeria" background="black">
         <Itens>
           {mock.map((media, index) => (
-            <Item key={media.url}>
+            <Item
+              key={media.url}
+              onClick={() => {
+                setModal({
+                  isVisible: true,
+                  type: media.type,
+                  url: media.url
+                })
+              }}
+            >
               <img
                 src={getMediaCover(media)}
                 alt={`midia 1 ${index + 1} de ${name}`}
@@ -63,15 +91,19 @@ const Gallery = ({ defaultCover, name }: Props) => {
           ))}
         </Itens>
       </Section>
-      <Modal>
+      <Modal className={modal.isVisible ? 'visible' : ' '}>
         <ModalContent className="container">
           <header>
             <h4>{name}</h4>
-            <img src={close} alt="botao fechar" />
+            <img src={close} alt="botao fechar" onClick={() => closeModal()} />
           </header>
-          <img src={spiderman} alt="imagem jogo" />
+          {modal.type === 'img' ? (
+            <img src={modal.url} alt="imagem jogo" />
+          ) : (
+            <iframe frameBorder={0} src={modal.url} />
+          )}
         </ModalContent>
-        <div className="overlay"></div>
+        <div onClick={() => closeModal()} className="overlay"></div>
       </Modal>
     </>
   )
