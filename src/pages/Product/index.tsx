@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import Hero from '../../components/Hero'
 import Section from '../../components/Section'
 import Gallery from '../../components/Gallery'
+import fifa from '../../assets/images/fifa.png'
 
 const Product = () => {
   const { id } = useParams()
@@ -36,7 +37,7 @@ const Product = () => {
           jogo.
         </p>
       </Section>
-      <Gallery />
+      <Gallery name="jogo teste" defaultCover={fifa} />
     </>
   )
 }
