@@ -18,6 +18,12 @@ const Product = ({
   system,
   title
 }: Props) => {
+  const getDescription = (description: string) => {
+    if (description.length > 95) {
+      return description.slice(0, 92) + '...'
+    }
+    return description
+  }
   return (
     <Card>
       <img src={image} alt={title} />
@@ -29,7 +35,7 @@ const Product = ({
       <TitleCd>{title}</TitleCd>
       <Tag>{category}</Tag>
       <Tag>{system}</Tag>
-      <Description>{description}</Description>
+      <Description>{getDescription(description)}</Description>
     </Card>
   )
 }

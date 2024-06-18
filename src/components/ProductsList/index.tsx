@@ -1,4 +1,4 @@
-import Game from '../../models/game'
+import { Game } from '../../pages/Home'
 import Product from '../Product'
 import { List, ProductContainer, TitlePL } from './styles'
 
@@ -9,6 +9,31 @@ export type Props = {
 }
 
 const ProductsList = ({ background, title, games }: Props) => {
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(price)
+  }
+
+  const getGameTags = (game: Game) => {
+    const tags = []
+
+    if (game.release_date) {
+      tags.push(game.release_date)
+    }
+
+    if (game.prices.discount) {
+      tags.push(`${game.prices.discount}%`)
+    }
+
+    if (game.prices.current) {
+      tags.push(formatPrice(game.prices.current))
+    }
+
+    return tags
+  }
+
   return (
     <ProductContainer background={background}>
       <div className="container">
@@ -17,12 +42,12 @@ const ProductsList = ({ background, title, games }: Props) => {
           {games.map((game) => (
             <Product
               key={game.id}
-              category={game.category}
+              category={game.details.category}
               description={game.description}
-              image={game.image}
-              infos={game.infos}
-              system={game.system}
-              title={game.title}
+              image={game.media.thumbnail}
+              infos={getGameTags(game)}
+              system={game.details.system}
+              title={game.name}
             />
           ))}
         </List>
