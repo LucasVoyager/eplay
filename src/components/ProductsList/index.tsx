@@ -8,14 +8,13 @@ export type Props = {
   games: Game[]
 }
 
+export const formatPrice = (price = 0) => {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(price)
+}
 const ProductsList = ({ background, title, games }: Props) => {
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL'
-    }).format(price)
-  }
-
   const getGameTags = (game: Game) => {
     const tags = []
 
